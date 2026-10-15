@@ -1,0 +1,38 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\mcp\\workspace",
+        "C:\\src"
+      ]
+    },
+    "markitdown": {
+      "command": "C:\\mcp\\markitdown\\.venv\\Scripts\\markitdown-mcp.exe"
+    },
+    "git": {
+      "command": "C:\\mcp\\git\\.venv\\Scripts\\mcp-server-git.exe"
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp",
+        "--output-dir",
+        "C:\\mcp\\workspace\\.playwright-mcp",
+        "--file-paths",
+        "absolute"
+      ]
+    },
+    "image": {
+      "command": "C:\\mcp\\comfyui-image\\.venv\\Scripts\\comfyui-image-mcp.exe",
+      "env": {
+        "COMFYUI_DIR": "C:\\mcp\\comfyui\\ComfyUI",
+        "COMFYUI_PYTHON": "C:\\mcp\\comfyui\\comfyui-venv\\Scripts\\python.exe",
+        "IMAGE_OUTPUT_DIR": "C:\\mcp\\workspace\\images"
+      }
+    }
+  }
+}

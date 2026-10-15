@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "comfyui-image-mcp"
+version = "0.1.0"
+description = "MCP server that generates images with a local ComfyUI instance"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+# FastMCP was renamed in mcp 2.x; this server targets the 1.x API.
+dependencies = ["mcp>=1.20,<2"]
+
+[project.scripts]
+comfyui-image-mcp = "comfyui_image_mcp:main"
+
+[tool.setuptools]
+py-modules = ["comfyui_image_mcp"]

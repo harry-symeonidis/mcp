@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# Runtime output
+*.log
+.playwright-mcp/
+images/
+out/
+
+# Local client configs (may contain machine paths); keep the examples
+mcp.json
+!examples/*.json
+
+# Large downloads that never belong in git
+*.safetensors
+*.ckpt
+ComfyUI/

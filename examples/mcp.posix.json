@@ -1,0 +1,39 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/opt/mcp/workspace",
+        "/srv/src"
+      ]
+    },
+    "markitdown": {
+      "command": "/opt/mcp/markitdown/.venv/bin/markitdown-mcp"
+    },
+    "git": {
+      "command": "/opt/mcp/git/.venv/bin/mcp-server-git"
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp",
+        "--headless",
+        "--output-dir",
+        "/opt/mcp/workspace/.playwright-mcp",
+        "--file-paths",
+        "absolute"
+      ]
+    },
+    "image": {
+      "command": "/opt/mcp/comfyui-image/.venv/bin/comfyui-image-mcp",
+      "env": {
+        "COMFYUI_DIR": "/opt/mcp/comfyui/ComfyUI",
+        "COMFYUI_PYTHON": "/opt/mcp/comfyui/comfyui-venv/bin/python",
+        "IMAGE_OUTPUT_DIR": "/opt/mcp/workspace/images"
+      }
+    }
+  }
+}
