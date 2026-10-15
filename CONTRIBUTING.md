@@ -1,6 +1,7 @@
 # Contributing
 
 Thanks for your interest. Bug reports, ideas, docs fixes and pull requests are all welcome.
+Everyone taking part is expected to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Getting in touch
 

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="320" viewBox="0 0 1280 320" role="img" aria-label="mcp: local MCP tools for LM Studio and Ollama">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/>
+      <stop offset="1" stop-color="#101827"/>
+    </linearGradient>
+    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="70"/>
+    </filter>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.15"/>
+    </linearGradient>
+    <clipPath id="frame"><rect width="1280" height="320" rx="28"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="1280" height="320" fill="url(#bg)"/>
+    <g filter="url(#soft)" opacity="0.9">
+      <circle cx="160" cy="40" r="210" fill="#4f46e5"/>
+      <circle cx="560" cy="360" r="230" fill="#0284c7"/>
+      <circle cx="1130" cy="60" r="230" fill="#0d9488"/>
+      <circle cx="930" cy="350" r="170" fill="#7c3aed"/>
+    </g>
+
+    <!-- connections: client hub to tools -->
+    <g fill="none" stroke="url(#edge)" stroke-width="2.5" stroke-linecap="round">
+      <path d="M960 160 C 1010 110, 1050 96, 1096 92"/>
+      <path d="M960 160 C 1020 150, 1060 150, 1118 160"/>
+      <path d="M960 160 C 1010 210, 1050 224, 1096 228"/>
+      <path d="M960 160 C 920 110, 900 98, 868 94"/>
+      <path d="M960 160 C 920 210, 900 222, 868 226"/>
+    </g>
+    <g fill="#ffffff">
+      <circle cx="960" cy="160" r="34" fill-opacity="0.16" stroke="#ffffff" stroke-opacity="0.6" stroke-width="2"/>
+      <circle cx="960" cy="160" r="12" fill-opacity="0.95"/>
+      <circle cx="1096" cy="92" r="9" fill-opacity="0.85"/>
+      <circle cx="1118" cy="160" r="9" fill-opacity="0.85"/>
+      <circle cx="1096" cy="228" r="9" fill-opacity="0.85"/>
+      <circle cx="868" cy="94" r="9" fill-opacity="0.85"/>
+      <circle cx="868" cy="226" r="9" fill-opacity="0.85"/>
+    </g>
+
+    <g font-family="Segoe UI, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif" fill="#ffffff">
+      <text x="96" y="172" font-size="116" font-weight="700" letter-spacing="-3">mcp</text>
+      <text x="100" y="226" font-size="30" font-weight="500" fill-opacity="0.9">Local MCP tools for LM Studio and Ollama</text>
+      <text x="100" y="266" font-size="20" fill-opacity="0.62">documents · git · files · browser · images, all on your own machine</text>
+    </g>
+  </g>
+</svg>

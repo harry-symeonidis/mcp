@@ -1,10 +1,63 @@
-# mcp
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/banner-dark.svg">
+    <img alt="mcp: local MCP tools for LM Studio and Ollama" src="assets/banner-light.svg" width="100%">
+  </picture>
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-4f46e5?style=flat-square"></a>
+  <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-0284c7?style=flat-square&logo=python&logoColor=white">
+  <img alt="MCP over stdio" src="https://img.shields.io/badge/MCP-stdio-0d9488?style=flat-square">
+  <img alt="LM Studio: mcp.json" src="https://img.shields.io/badge/LM%20Studio-mcp.json-7c3aed?style=flat-square">
+  <img alt="Ollama: via ollmcp" src="https://img.shields.io/badge/Ollama-via%20ollmcp-475569?style=flat-square">
+  <img alt="Runs locally" src="https://img.shields.io/badge/runs-locally-16a34a?style=flat-square">
+</p>
+
+<p align="center">
+  <a href="#quick-start">Quick start</a> ·
+  <a href="docs/third-party-servers.md">Servers</a> ·
+  <a href="servers/comfyui-image">Image server</a> ·
+  <a href="docs/lm-studio.md">LM Studio</a> ·
+  <a href="docs/ollama.md">Ollama</a> ·
+  <a href="CONTRIBUTING.md">Contributing</a>
+</p>
 
 MCP (Model Context Protocol) tools for running local language models with real
 capabilities, such as reading documents, working in Git repositories, browsing and
 generating images, from [LM Studio](https://lmstudio.ai) or an
 [Ollama](https://ollama.com) MCP client. Everything runs on the local machine; nothing
 here needs an account or a cloud API.
+
+## How it fits together
+
+```mermaid
+flowchart LR
+    subgraph clients["Chat client"]
+        lms["LM Studio"]
+        oll["ollmcp + Ollama"]
+    end
+    subgraph servers["MCP servers (stdio)"]
+        fs["📁 filesystem"]
+        md["📄 markitdown"]
+        git["🌿 git"]
+        pw["🌐 playwright"]
+        img["🎨 comfyui-image-mcp"]
+    end
+    clients --> servers
+    fs --> files[("Local files")]
+    md --> files
+    git --> repos[("Git repositories")]
+    pw --> browser["Browser"]
+    img --> comfy["ComfyUI on 127.0.0.1"] --> gpu["Local GPU"]
+
+    classDef client fill:#4f46e5,stroke:#312e81,color:#fff
+    classDef server fill:#0d9488,stroke:#115e59,color:#fff
+    classDef local fill:#e0f2fe,stroke:#0284c7,color:#0f172a
+    class lms,oll client
+    class fs,md,git,pw,img server
+    class files,repos,browser,comfy,gpu local
+```
 
 ## What's here
 
@@ -19,13 +72,13 @@ here needs an account or a cloud API.
 
 ## The server set
 
-| Server | Gives the model | Source |
-|---|---|---|
-| filesystem | Read/write/search files in chosen folders | npm `@modelcontextprotocol/server-filesystem` |
-| markitdown | PDF, DOCX, PPTX, XLSX, HTML → Markdown | PyPI `markitdown-mcp` |
-| git | Status, diff, log, stage, commit, branch (no push) | PyPI `mcp-server-git` |
-| playwright | A real browser | npm `@playwright/mcp` |
-| image | Local text-to-image | this repo, plus ComfyUI and a checkpoint |
+| | Server | Gives the model | Source |
+|---|---|---|---|
+| 📁 | filesystem | Read/write/search files in chosen folders | npm `@modelcontextprotocol/server-filesystem` |
+| 📄 | markitdown | PDF, DOCX, PPTX, XLSX, HTML → Markdown | PyPI `markitdown-mcp` |
+| 🌿 | git | Status, diff, log, stage, commit, branch (no push) | PyPI `mcp-server-git` |
+| 🌐 | playwright | A real browser | npm `@playwright/mcp` |
+| 🎨 | image | Local text-to-image | this repo, plus ComfyUI and a checkpoint |
 
 Only `comfyui-image-mcp` and the smoke-test tool live in this repository. The others are
 installed from their package registries. ComfyUI, PyTorch and model weights are large
@@ -103,7 +156,8 @@ python tools/mcp_smoke_test.py --save-dir out --call generate_image \
 
 Questions go in [Discussions](../../discussions), and bugs and requests in
 [Issues](../../issues). Pull requests are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).
-Report security problems privately ([SECURITY.md](SECURITY.md)).
+Report security problems privately ([SECURITY.md](SECURITY.md)). Everyone taking part
+is expected to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 
