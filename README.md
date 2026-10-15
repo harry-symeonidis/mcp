@@ -57,6 +57,8 @@ flowchart LR
     class lms,oll client
     class fs,md,git,pw,img server
     class files,repos,browser,comfy,gpu local
+    style clients fill:#4f46e51a,stroke:#4f46e5
+    style servers fill:#0d94881a,stroke:#0d9488
 ```
 
 ## What's here
