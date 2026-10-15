@@ -1,0 +1,7 @@
+# Runtime dependency for running the code in this repository straight from a checkout,
+# e.g. `python tools/mcp_smoke_test.py` or `python servers/comfyui-image/comfyui_image_mcp.py`.
+#   pip install -r requirements.txt
+#
+# The packaged commands (comfyui-image-mcp, mcp-smoke-test) declare the same dependency
+# in their pyproject.toml files; keep the two in step.
+mcp>=1.20,<2

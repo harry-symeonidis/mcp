@@ -1,0 +1,7 @@
+# Development setup: both packages in editable mode plus the build tool.
+# Run from the repository root:
+#   pip install -r requirements-dev.txt
+-r requirements.txt
+build
+-e ./servers/comfyui-image
+-e ./tools

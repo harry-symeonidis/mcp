@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcp-smoke-test"
+version = "0.1.0"
+description = "Start an MCP stdio server, list its tools and call one"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+# Uses the 1.x client API.
+dependencies = ["mcp>=1.20,<2"]
+
+[project.scripts]
+mcp-smoke-test = "mcp_smoke_test:main"
+
+[tool.setuptools]
+py-modules = ["mcp_smoke_test"]

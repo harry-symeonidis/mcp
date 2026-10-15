@@ -6,6 +6,8 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/harry-symeonidis/mcp/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/harry-symeonidis/mcp?style=flat-square&color=0284c7"></a>
+  <a href="https://github.com/harry-symeonidis/mcp/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/harry-symeonidis/mcp/ci.yml?branch=main&style=flat-square&label=CI"></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-4f46e5?style=flat-square"></a>
   <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-0284c7?style=flat-square&logo=python&logoColor=white">
   <img alt="MCP over stdio" src="https://img.shields.io/badge/MCP-stdio-0d9488?style=flat-square">
@@ -66,7 +68,7 @@ flowchart LR
 | Path | What it is |
 |---|---|
 | [`servers/comfyui-image/`](servers/comfyui-image) | **comfyui-image-mcp**, an MCP server that generates images with a local ComfyUI (`generate_image`, `list_checkpoints`, `free_image_memory`) |
-| [`tools/mcp_smoke_test.py`](tools/mcp_smoke_test.py) | Starts any stdio MCP server from an `mcpServers` config or command line, lists its tools and calls one |
+| [`tools/`](tools) | **mcp-smoke-test**, which starts any stdio MCP server from an `mcpServers` config or command line, lists its tools and calls one |
 | [`examples/`](examples) | `mcpServers` configs for Windows and Linux/macOS with every server below |
 | [`docs/third-party-servers.md`](docs/third-party-servers.md) | Install and usage notes for the third-party servers |
 | [`docs/lm-studio.md`](docs/lm-studio.md) | Using the servers from LM Studio |
@@ -92,29 +94,59 @@ downloads and are documented, not committed.
 2. **Install the third-party servers** you want, as described in
    [docs/third-party-servers.md](docs/third-party-servers.md). Each Python server gets
    its own virtual environment.
-3. **Optional: image generation.** Install ComfyUI and a checkpoint, then this repo's
-   server ([servers/comfyui-image/README.md](servers/comfyui-image/README.md)):
-   ```sh
-   python -m venv /opt/mcp/comfyui-image/.venv
-   /opt/mcp/comfyui-image/.venv/bin/pip install ./servers/comfyui-image
-   ```
+3. **Install this repo's packages** (see [Install](#install)). `mcp-smoke-test` is useful
+   for everyone. `comfyui-image-mcp` is only needed for image generation, after setting
+   up ComfyUI and a checkpoint ([servers/comfyui-image/README.md](servers/comfyui-image/README.md)).
 4. **Configure the client.** Copy the matching file from [`examples/`](examples), fix
    the paths, and remove servers you didn't install:
    - LM Studio: merge it into `~/.lmstudio/mcp.json` ([docs/lm-studio.md](docs/lm-studio.md)).
    - Ollama: `ollmcp --servers-json <file>` ([docs/ollama.md](docs/ollama.md)).
 5. **Check each server** before using it in a chat:
    ```sh
-   pip install "mcp>=1.20,<2"
-   python tools/mcp_smoke_test.py --config <file> --server markitdown
+   mcp-smoke-test --config <file> --server markitdown
    ```
+
+## Install
+
+Every [release](https://github.com/harry-symeonidis/mcp/releases) has a wheel and a
+source archive for each package, plus `SHA256SUMS`. Copy the exact commands from the
+release notes, or replace `0.1.0` below with the version you want.
+
+**As commands on your PATH**, each in its own isolated environment, with
+[uv](https://docs.astral.sh/uv/) (or `pipx install` with the same URLs):
+
+```sh
+uv tool install https://github.com/harry-symeonidis/mcp/releases/download/v0.1.0/mcp_smoke_test-0.1.0-py3-none-any.whl
+uv tool install https://github.com/harry-symeonidis/mcp/releases/download/v0.1.0/comfyui_image_mcp-0.1.0-py3-none-any.whl
+```
+
+**Into a virtual environment** with pip:
+
+```sh
+python -m venv .venv
+.venv/bin/pip install https://github.com/harry-symeonidis/mcp/releases/download/v0.1.0/comfyui_image_mcp-0.1.0-py3-none-any.whl
+```
+
+**From a checkout**, without packaging:
+
+```sh
+git clone https://github.com/harry-symeonidis/mcp.git && cd mcp
+pip install -r requirements.txt
+python tools/mcp_smoke_test.py --help
+```
+
+The installed commands are `comfyui-image-mcp` (point your client's `command` at it) and
+`mcp-smoke-test`. `uv tool dir --bin` shows where uv puts them.
 
 ## Smoke-test tool
 
 ```text
-python tools/mcp_smoke_test.py [--config FILE --server NAME | -- COMMAND ARGS...]
-                               [--call TOOL] [--args JSON] [--save-dir DIR]
-                               [--timeout SECONDS] [--max-chars N]
+mcp-smoke-test [--config FILE --server NAME | -- COMMAND ARGS...]
+               [--call TOOL] [--args JSON] [--save-dir DIR]
+               [--timeout SECONDS] [--max-chars N]
 ```
+
+(From a checkout without installing: `python tools/mcp_smoke_test.py ...`.)
 
 It prints the server name, every tool with the first line of its description and, with
 `--call`, the result. Text is truncated to `--max-chars`, and images are saved to
@@ -122,14 +154,14 @@ It prints the server name, every tool with the first line of its description and
 
 ```sh
 # list the tools of a configured server
-python tools/mcp_smoke_test.py --config examples/mcp.posix.json --server git
+mcp-smoke-test --config examples/mcp.posix.json --server git
 
 # convert a document
-python tools/mcp_smoke_test.py --config mcp.json --server markitdown \
+mcp-smoke-test --config mcp.json --server markitdown \
   --call convert_to_markdown --args '{"uri": "file:///tmp/report.docx"}'
 
 # run a server straight from the command line and save the image it returns
-python tools/mcp_smoke_test.py --save-dir out --call generate_image \
+mcp-smoke-test --save-dir out --call generate_image \
   --args '{"prompt": "a lighthouse at dusk, oil painting"}' -- comfyui-image-mcp
 ```
 

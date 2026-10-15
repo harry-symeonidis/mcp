@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  branch-name:
+    name: Branch name
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the branch follows the naming convention
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          pattern='^(feature|bugfix|hotfix|issue|docs|chore|release|dependabot)/[A-Za-z0-9._/-]+$'
+          if [[ ! "$HEAD_REF" =~ $pattern ]]; then
+            echo "::error::Branch '$HEAD_REF' must start with feature/, bugfix/, hotfix/, issue/, docs/, chore/ or release/ (see CONTRIBUTING.md)"
+            exit 1
+          fi
+          echo "Branch '$HEAD_REF' is fine"
+
+  build-and-smoke-test:
+    name: ${{ matrix.os }} / Python ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ["3.10", "3.13"]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Build packages
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build servers/comfyui-image --outdir dist
+          python -m build tools --outdir dist
+
+      - name: Install wheels
+        run: python -m pip install dist/*.whl
+
+      - name: Smoke test comfyui-image-mcp
+        run: |
+          # The server must start and list its tools without ComfyUI present...
+          mcp-smoke-test -- comfyui-image-mcp | tee tools.txt
+          grep -q "^3 tools:" tools.txt
+          # ...and report a missing ComfyUI as a tool error rather than crashing.
+          mcp-smoke-test --call list_checkpoints -- comfyui-image-mcp | tee call.txt
+          grep -q "error: True" call.txt
+          grep -q "ComfyUI is not running" call.txt
+
+      - name: Check example configs
+        run: |
+          for f in examples/*.json; do
+            python -c "import json, sys; json.load(open(sys.argv[1]))['mcpServers']" "$f"
+          done
