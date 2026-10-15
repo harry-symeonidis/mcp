@@ -1,0 +1,22 @@
+name: Feature request
+description: Suggest a server, tool, option or doc
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What do you want to do?
+      description: The task you want a local model to be able to do, or the gap in the docs.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested approach
+      description: Optional. An existing server you'd like documented, a tool design, a flag, and so on.
+  - type: checkboxes
+    id: local
+    attributes:
+      label: Local first
+      options:
+        - label: This can run entirely on the local machine, without accounts or cloud APIs.

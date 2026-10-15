@@ -99,6 +99,12 @@ python tools/mcp_smoke_test.py --save-dir out --call generate_image \
 4. Optional: `pip cache purge` and `npm cache clean --force` to drop downloaded packages
    (the ROCm PyTorch wheels alone are several GB).
 
+## Contributing
+
+Questions go in [Discussions](../../discussions), and bugs and requests in
+[Issues](../../issues). Pull requests are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).
+Report security problems privately ([SECURITY.md](SECURITY.md)).
+
 ## License
 
 [MIT](LICENSE). Use, fork, modify and redistribute freely. The third-party servers,

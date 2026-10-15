@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions and ideas
+    url: https://github.com/harry-symeonidis/mcp/discussions
+    about: Ask how to set something up, or share your configuration.
+  - name: Security problem
+    url: https://github.com/harry-symeonidis/mcp/security/advisories/new
+    about: Report privately instead of opening a public issue.
