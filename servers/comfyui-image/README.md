@@ -83,14 +83,24 @@ the wrong folder.
 
 ## 3. Install this server
 
-Use a separate small environment (it needs only the MCP SDK):
+It needs only the MCP SDK, so give it its own small environment, separate from ComfyUI's.
+Either install the release wheel as a command with uv (or pipx):
+
+```sh
+uv tool install https://github.com/harry-symeonidis/mcp/releases/download/v0.1.0/comfyui_image_mcp-0.1.0-py3-none-any.whl
+```
+
+or into a virtual environment:
 
 ```sh
 python -m venv .venv
-.venv/bin/pip install ./servers/comfyui-image          # Windows: .venv\Scripts\pip
+.venv/bin/pip install https://github.com/harry-symeonidis/mcp/releases/download/v0.1.0/comfyui_image_mcp-0.1.0-py3-none-any.whl
+# from a checkout instead: .venv/bin/pip install ./servers/comfyui-image
 ```
 
-This installs the `comfyui-image-mcp` command into that environment.
+(Windows: `.venv\Scripts\pip`.) Either way you get a `comfyui-image-mcp` command; use its
+full path as the client's `command`. For other versions, see the
+[releases](https://github.com/harry-symeonidis/mcp/releases).
 
 ## 4. Configure your MCP client
 

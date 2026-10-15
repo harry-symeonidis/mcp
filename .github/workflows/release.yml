@@ -1,0 +1,73 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Check package versions match the tag
+        run: |
+          want="${GITHUB_REF_NAME#v}"
+          for pkg in servers/comfyui-image tools; do
+            have=$(python -c "import sys, tomllib; print(tomllib.load(open(sys.argv[1], 'rb'))['project']['version'])" "$pkg/pyproject.toml")
+            if [ "$have" != "$want" ]; then
+              echo "::error::$pkg is version $have but the tag is $GITHUB_REF_NAME"
+              exit 1
+            fi
+          done
+
+      - name: Build packages
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build servers/comfyui-image --outdir dist
+          python -m build tools --outdir dist
+
+      - name: Smoke test the built wheels
+        run: |
+          python -m venv /tmp/check
+          /tmp/check/bin/pip install dist/*.whl
+          /tmp/check/bin/mcp-smoke-test -- /tmp/check/bin/comfyui-image-mcp | grep -q "^3 tools:"
+
+      - name: Write checksums and release notes
+        run: |
+          (cd dist && sha256sum * > SHA256SUMS)
+          version="${GITHUB_REF_NAME#v}"
+          base="https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}"
+          {
+            awk -v h="## [$version]" 'index($0, h) == 1 {f=1; next} /^## \[/ || /^\[[^]]*\]: / {f=0} f' CHANGELOG.md
+            echo
+            echo "## Install"
+            echo
+            echo '```sh'
+            echo "# as isolated commands on PATH (uv or pipx)"
+            echo "uv tool install ${base}/comfyui_image_mcp-${version}-py3-none-any.whl"
+            echo "uv tool install ${base}/mcp_smoke_test-${version}-py3-none-any.whl"
+            echo
+            echo "# or into a virtual environment"
+            echo "pip install ${base}/comfyui_image_mcp-${version}-py3-none-any.whl"
+            echo '```'
+            echo
+            echo "Check downloads against \`SHA256SUMS\`. Setup guides are in the [README](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_REF_NAME}/README.md)."
+          } > notes.md
+          cat notes.md
+
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/* --title "$GITHUB_REF_NAME" --notes-file notes.md --verify-tag
