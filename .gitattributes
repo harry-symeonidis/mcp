@@ -1,0 +1,6 @@
+# Text is stored with LF endings and checked out with LF on every platform. Without this,
+# Git for Windows (core.autocrlf=true by default) checks files out with CRLF, and git in
+# WSL or Linux, working on the same checkout, then sees every one of them as changed.
+* text=auto eol=lf
+
+*.png binary

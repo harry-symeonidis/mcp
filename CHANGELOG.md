@@ -3,6 +3,13 @@
 All notable changes are listed here. Versions follow [Semantic Versioning](https://semver.org);
 both packages (`comfyui-image-mcp` and `mcp-smoke-test`) are released together under one tag.
 
+## Unreleased
+
+### Changed
+
+- Text files are checked out with LF line endings on every platform (`.gitattributes`), so
+  a checkout shared between Windows and WSL no longer shows every file as changed.
+
 ## [0.1.0] - 2026-10-15
 
 First release.
